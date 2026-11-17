@@ -4,12 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Kehrwerk für Windows</title>
-<meta name="description" content="Kehrwerk räumt deinen Windows-PC auf: Müll und Cache, große Dateien, Duplikate, Ordner sortieren, Programme verschieben – sicher, mit Papierkorb und Rückgängig.">
+<meta name="description" content="Kehrwerk räumt deinen Windows-PC auf: Müll und Cache, große Dateien, Duplikate, Ordner sortieren, Programme verschieben – sicher, mit Papierkorb und Rückgängig. 7 Tage testen, danach 3,99 € im Monat.">
 <link rel="icon" href="icon.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@500;600&display=swap">
 <style>
+/* Schrift liegt auf der eigenen Seite (Geist, SIL Open Font License) – keine Verbindung zu Google. */
+@font-face { font-family: "Geist"; src: url("fonts/Geist-Variable.woff2") format("woff2"); font-weight: 100 900; font-display: swap; }
+@font-face { font-family: "Geist Mono"; src: url("fonts/GeistMono-Variable.woff2") format("woff2"); font-weight: 100 900; font-display: swap; }
 /* Schwarze Bühne wie eine Produktseite – das App-Fenster ist der Held. */
 :root {
   color-scheme: dark;
@@ -237,6 +237,30 @@ section { position: relative; }
 .dl-note { max-width: 560px; margin: 34px auto 0; font-size: 15px; color: var(--muted); background: var(--surface-2); border: 1px solid var(--line); border-radius: 16px; padding: 14px 18px; position: relative; }
 .req { margin-top: 28px; font-size: 13px; color: var(--dim); position: relative; font-family: var(--mono); }
 
+.price-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 20px; margin-top: 56px; text-align: left; position: relative; }
+.plan { background: var(--surface); border: 1px solid var(--line); border-radius: 30px; padding: 32px; display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+.plan.pro { background: radial-gradient(80% 90% at 85% 0%, rgba(62,207,142,.16), transparent 70%), var(--surface); border-color: rgba(62,207,142,.35); }
+.plan h3 { font-size: 24px; font-weight: 600; letter-spacing: -0.02em; }
+.plan .amount { font: 700 52px var(--display); letter-spacing: -0.04em; line-height: 1; }
+.plan .amount small { font: 500 17px var(--body); color: var(--muted); letter-spacing: 0; }
+.plan ul { list-style: none; padding: 0; margin: 4px 0 0; display: grid; gap: 9px; }
+.plan li { display: grid; grid-template-columns: 20px minmax(0, 1fr); gap: 10px; font-size: 15px; color: var(--muted); }
+.plan li svg { width: 20px; height: 20px; color: var(--mint); }
+.plan li.no svg { color: var(--dim); }
+.plan .cta { margin-top: auto; padding-top: 10px; display: grid; gap: 12px; }
+.plan .btn-big { width: 100%; }
+.btn-go { background: var(--mint); color: #062015; }
+.btn-go:hover { background: #5ee0a5; }
+.btn-go[disabled] { opacity: .45; cursor: not-allowed; }
+.consent { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 10px; font-size: 13px; color: var(--muted); cursor: pointer; }
+.consent input { width: 18px; height: 18px; margin: 1px 0 0; accent-color: var(--mint); }
+.consent a { color: var(--fg); }
+.fine { font-size: 12.5px; color: var(--dim); }
+.err { font-size: 14px; color: var(--red); min-height: 1em; }
+footer nav { display: flex; gap: 18px; flex-wrap: wrap; }
+footer nav a { text-decoration: none; }
+footer nav a:hover { color: var(--fg); }
+@media (max-width: 900px) { .price-grid { grid-template-columns: minmax(0, 1fr); } }
 footer { border-top: 1px solid var(--line); padding-block: 28px 40px; font-size: 13px; color: var(--dim); }
 footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
 
@@ -285,6 +309,7 @@ footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wr
   <symbol id="i-key" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" d="M14 10a4 4 0 1 1-1.2-2.8L21 15v3h-3v-2h-2v-2h-2"/></symbol>
   <symbol id="i-wifi" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" d="M3 3l18 18M8.5 16.5a5 5 0 0 1 7 0M5 13a10 10 0 0 1 4-2.5M19 13a10 10 0 0 0-2.4-1.8M12 20h.01"/></symbol>
   <symbol id="i-folder" viewBox="0 0 24 24"><path fill="currentColor" d="M3 6.5A1.5 1.5 0 0 1 4.5 5h4.3l2 2h8.7A1.5 1.5 0 0 1 21 8.5v9a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 3 17.5z"/></symbol>
+  <symbol id="i-tick" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="m5 12.5 4.5 4.5L19 7.5"/></symbol>
   <symbol id="i-down" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M12 4v11M7 10.5l5 5 5-5M5 20h14"/></symbol>
 </svg>
 
@@ -295,8 +320,9 @@ footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wr
       <a href="#bereiche">Bereiche</a>
       <a href="#sicher">Sicherheit</a>
       <a href="#so">So geht's</a>
+      <a href="#preis">Preis</a>
     </nav>
-    <a class="btn btn-small" href="#laden">Laden</a>
+    <a class="btn btn-small" href="#preis">Testen</a>
   </div>
 </header>
 
@@ -308,10 +334,10 @@ footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wr
       <h1 style="margin-top:14px">Dein PC.<br><span class="grad-fresh">Endlich aufgeräumt.</span></h1>
       <p class="lead">Kehrwerk findet Müll, riesige Dateien und doppelte Fotos, sortiert volle Ordner und schiebt Programme auf eine andere Platte. Du entscheidest, was passiert, und alles lässt sich rückgängig machen.</p>
       <div class="ctas">
-        <a class="btn btn-big" href="#laden"><svg><use href="#i-down"/></svg>Für Windows laden</a>
+        <a class="btn btn-big" href="#preis"><svg><use href="#i-down"/></svg>7 Tage testen</a>
         <a class="btn-link" href="#bereiche">Bereiche ansehen ›</a>
       </div>
-      <p class="meta">Kostenlos · läuft ohne Internet · Deutsch</p>
+      <p class="meta">7 Tage testen · danach 3,99 € im Monat · monatlich kündbar</p>
 
       <div class="screen-wrap">
         <div class="bezel">
@@ -534,22 +560,53 @@ footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wr
     </div>
   </section>
 
-  <section class="sec download" id="laden">
+  <section class="sec download" id="preis">
     <div class="glow"></div>
     <div class="wrap">
-      <p class="eyebrow">Version 1.0</p>
-      <h2 style="margin-top:14px">Mach Platz.<br><span class="grad-fresh">Ganz in Ruhe.</span></h2>
-      <p class="lead">Ein Programm, eine Datei, keine Installation. Doppelklick auf Kehrwerk.exe, und es geht los.</p>
-      <p class="dl-note">Kehrwerk ist gerade in der Testphase. Der Download erscheint hier, sobald die erste Version freigegeben ist.</p>
-      <p class="req">Windows 10 oder 11 · 64 Bit · funktioniert ohne Internet</p>
+      <p class="eyebrow">Preis</p>
+      <h2 style="margin-top:14px">Erst testen.<br><span class="grad-fresh">Dann entscheiden.</span></h2>
+      <p class="lead">Ein Programm, eine Datei, keine Installation. Lade Kehrwerk, probier es 7 Tage aus und schalte dann alles frei.</p>
+      <div class="price-grid">
+        <article class="plan">
+          <h3>7 Tage testen</h3>
+          <div class="amount">0 €</div>
+          <ul>
+            <li><svg><use href="#i-tick"/></svg>Alles scannen und ansehen</li>
+            <li><svg><use href="#i-tick"/></svg>Müll und Cache aufräumen</li>
+            <li><svg><use href="#i-tick"/></svg>KI-Berater fragen</li>
+            <li class="no"><svg><use href="#i-lock"/></svg>Löschen, Ordnen, Verschieben und Übertragen erst mit Abo</li>
+          </ul>
+          <div class="cta">
+            <a class="btn btn-big" id="dl" href="https://github.com/Newxcall/kehrwerk/releases/latest/download/Kehrwerk.exe"><svg><use href="#i-down"/></svg>Kehrwerk.exe laden</a>
+            <p class="fine">Windows 10 oder 11 · 64 Bit. Zeigt Windows beim ersten Start „Der Computer wurde durch Windows geschützt“, klicke auf „Weitere Informationen“ und dann „Trotzdem ausführen“.</p>
+          </div>
+        </article>
+        <article class="plan pro">
+          <h3>Kehrwerk Abo</h3>
+          <div class="amount">3,99 € <small>im Monat</small></div>
+          <ul>
+            <li><svg><use href="#i-tick"/></svg>Alle sieben Bereiche ohne Grenzen</li>
+            <li><svg><use href="#i-tick"/></svg>Bis zu 3 PCs mit einem Schlüssel</li>
+            <li><svg><use href="#i-tick"/></svg>Alle Updates inklusive</li>
+            <li><svg><use href="#i-tick"/></svg>Monatlich kündbar, mit einem Klick</li>
+          </ul>
+          <div class="cta">
+            <label class="consent"><input type="checkbox" id="agree"><span>Ich akzeptiere die <a href="agb.html">AGB</a> und habe die <a href="widerruf.html">Widerrufsbelehrung</a> gelesen. Ich stimme zu, dass Kehrwerk sofort freigeschaltet wird, und weiß, dass ich damit mein Widerrufsrecht verliere.</span></label>
+            <button class="btn btn-big btn-go" id="buy" disabled>Abo abschließen</button>
+            <p class="err" id="buyErr" role="alert"></p>
+            <p class="fine">Sichere Bezahlung über Stripe. Nach dem Bezahlen bekommst du deinen Schlüssel und trägst ihn in Kehrwerk unter „Abo“ ein.</p>
+          </div>
+        </article>
+      </div>
+      <p class="req">Kehrwerk arbeitet offline. Nur um das Abo zu prüfen, meldet es sich etwa einmal pro Woche kurz beim Lizenz-Dienst.</p>
     </div>
   </section>
 </main>
 
 <footer>
   <div class="wrap">
-    <span>Kehrwerk · ein Aufräumprogramm für Windows</span>
-    <span>Läuft komplett auf deinem PC – keine Daten verlassen ihn.</span>
+    <span>Kehrwerk · ein Aufräumprogramm für Windows · Deine Dateien bleiben auf deinem PC.</span>
+    <nav aria-label="Rechtliches"><a href="impressum.html">Impressum</a><a href="datenschutz.html">Datenschutz</a><a href="agb.html">AGB</a><a href="widerruf.html">Widerruf</a><a href="kuendigen.html">Verträge hier kündigen</a></nav>
   </div>
 </footer>
 
@@ -589,6 +646,26 @@ footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wr
     });
   });
   if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) auto();
+
+  // Abo abschließen: der Lizenz-Dienst erstellt die Stripe-Bezahlseite
+  var API = location.hostname === '127.0.0.1' ? 'http://127.0.0.1:8787/' : 'https://snafgyzhegwkxmunmxje.supabase.co/functions/v1/kehrwerk-license';  // lokal: server/dev_server.mjs
+  var agree = document.getElementById('agree'), buy = document.getElementById('buy'), err = document.getElementById('buyErr');
+  agree.addEventListener('change', function () { buy.disabled = !agree.checked; err.textContent = ''; });
+  buy.addEventListener('click', function () {
+    if (!agree.checked) return;
+    buy.disabled = true; buy.textContent = 'Einen Moment …'; err.textContent = '';
+    fetch(API, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'checkout' }) })
+      .then(function (r) { return r.json(); })
+      .then(function (j) {
+        if (j.url && j.url.indexOf('https://checkout.stripe.com/') === 0) { location.href = j.url; return; }
+        throw new Error(j.error || 'Die Bezahlseite ließ sich nicht öffnen.');
+      })
+      .catch(function (e) {
+        var m = e && e.message;
+        err.textContent = (m && m !== 'Failed to fetch' && m.indexOf('JSON') < 0) ? m : 'Keine Verbindung zum Lizenz-Dienst. Bitte später noch einmal versuchen.';
+        buy.disabled = false; buy.textContent = 'Abo abschließen';
+      });
+  });
 })();
 </script>
 </body>
