@@ -77,6 +77,8 @@ label.small { font-size: 13px; color: var(--muted); }
       <h2 style="margin-top:0">Kostenlos freischalten</h2>
       <p>Für dich selbst, Tester oder Freunde. Es entsteht ein Schlüssel ohne Abo – es wird nie etwas abgebucht. Gilt wie ein Abo für bis zu 3 PCs.</p>
       <div class="grid2">
+        <div><label class="small" for="gProduct">Programm</label>
+          <select id="gProduct"><option value="kehrwerk">Kehrwerk</option><option value="pebble">Pebble</option><option value="idock">iDock</option></select></div>
         <div><label class="small" for="gName">Name</label><input id="gName" placeholder="z. B. Deniz"></div>
         <div><label class="small" for="gMail">E-Mail (optional)</label><input id="gMail" type="email" placeholder="name@beispiel.de"></div>
         <div><label class="small" for="gNote">Notiz (optional)</label><input id="gNote" placeholder="z. B. Entwickler, Tester"></div>
@@ -86,7 +88,7 @@ label.small { font-size: 13px; color: var(--muted); }
       <button class="btn btn-go" id="grantBtn">Schlüssel erstellen</button>
       <p class="err" id="grantErr" role="alert"></p>
       <div id="newKey">
-        <p class="ok">Fertig. Schlüssel (in Kehrwerk unter „Abo“ eintragen):</p>
+        <p class="ok" id="newKeyHint">Fertig. Schlüssel (im Programm unter „Abo“ eintragen):</p>
         <div class="key" id="newKeyText"></div>
         <button class="btn btn-ghost btn-s" data-copy="newKeyText">Kopieren</button>
       </div>
@@ -98,6 +100,9 @@ label.small { font-size: 13px; color: var(--muted); }
       <select id="filter" class="btn btn-ghost btn-s">
         <option value="all">Alle</option><option value="active">Aktiv</option><option value="abo">Zahlende</option>
         <option value="frei">Kostenlos</option><option value="off">Beendet/gesperrt</option>
+      </select>
+      <select id="prod" class="btn btn-ghost btn-s">
+        <option value="all">Alle Programme</option><option value="kehrwerk">Kehrwerk</option><option value="pebble">Pebble</option><option value="idock">iDock</option>
       </select>
       <button class="btn btn-ghost btn-s" id="reload">Neu laden</button>
     </div>
@@ -155,6 +160,8 @@ label.small { font-size: 13px; color: var(--muted); }
   $('reload').addEventListener('click', load);
   $('q').addEventListener('input', render);
   $('filter').addEventListener('change', render);
+  $('prod').addEventListener('change', render);
+  var NAMES = { kehrwerk: 'Kehrwerk', pebble: 'Pebble', idock: 'iDock' };
 
   function status(r) {
     if (r.blocked) return '<span class="tag bad">gesperrt</span>';
@@ -169,9 +176,10 @@ label.small { font-size: 13px; color: var(--muted); }
     $('sFree').textContent = rows.filter(function (r) { return r.type === 'frei' && r.active && !r.blocked; }).length;
     $('sMonth').textContent = (active * 3.99).toFixed(2).replace('.', ',') + ' €';
     $('sEnded').textContent = rows.filter(function (r) { return !r.active || r.blocked; }).length;
-    var q = $('q').value.trim().toLowerCase(), f = $('filter').value;
+    var q = $('q').value.trim().toLowerCase(), f = $('filter').value, pf = $('prod').value;
     var shown = rows.filter(function (r) {
       var on = r.active && !r.blocked;
+      if (pf !== 'all' && (r.product || 'kehrwerk') !== pf) return false;
       if (f === 'active' && !on) return false;
       if (f === 'abo' && r.type !== 'abo') return false;
       if (f === 'frei' && r.type !== 'frei') return false;
@@ -179,7 +187,7 @@ label.small { font-size: 13px; color: var(--muted); }
       return !q || [r.name, r.email, r.key, r.note, r.id].join(' ').toLowerCase().indexOf(q) >= 0;
     });
     $('list').innerHTML = shown.length ? shown.map(function (r, i) {
-      var meta = [r.type === 'abo' ? 'Abo 3,99 €' : 'Kostenlos' + (r.note ? ' · ' + esc(r.note) : ''),
+      var meta = [NAMES[r.product || 'kehrwerk'], r.type === 'abo' ? 'Abo 3,99 €' : 'Kostenlos' + (r.note ? ' · ' + esc(r.note) : ''),
         'seit ' + date(r.created),
         r.until ? (r.type === 'frei' ? 'gültig bis ' : (r.cancelled ? 'endet ' : 'nächste Zahlung ')) + date(r.until) : (r.type === 'frei' ? 'unbegrenzt' : ''),
         r.devices.length + ' von 3 PCs'].filter(Boolean).join(' · ');
@@ -207,7 +215,7 @@ label.small { font-size: 13px; color: var(--muted); }
   function act(btn, a, r) {
     if (a === 'copy') return copy(r.key, btn);
     var who = r.name || r.email || r.id;
-    var ask = { block: who + ' sperren? Kehrwerk wird bei der nächsten Prüfung gesperrt (Zahlungen laufen bei Stripe weiter).',
+    var ask = { block: who + ' sperren? Das Programm wird bei der nächsten Prüfung gesperrt (Zahlungen laufen bei Stripe weiter).',
       unfree: 'Kostenlose Freischaltung von ' + who + ' beenden?', reset: 'Alle PCs von ' + who + ' abmelden? Der Schlüssel kann danach neu eingetragen werden.' }[a];
     if (ask && !confirm(ask)) return;
     var p = { action: 'admin_set', id: r.id };
@@ -222,10 +230,11 @@ label.small { font-size: 13px; color: var(--muted); }
 
   $('grantBtn').addEventListener('click', function () {
     var days = +$('gUntil').value;
-    var p = { action: 'admin_grant', name: $('gName').value, email: $('gMail').value, note: $('gNote').value,
+    var p = { action: 'admin_grant', product: $('gProduct').value, name: $('gName').value, email: $('gMail').value, note: $('gNote').value,
       until: days ? Math.floor(Date.now() / 1000) + days * 86400 : 0 };
     $('grantBtn').disabled = true; $('grantErr').textContent = ''; $('newKey').style.display = 'none';
     call(p).then(function (j) {
+      $('newKeyHint').textContent = 'Fertig. Schlüssel (in ' + NAMES[j.product || 'kehrwerk'] + ' unter „Abo“ eintragen):';
       $('newKeyText').textContent = j.key; $('newKey').style.display = 'block';
       $('gName').value = $('gMail').value = $('gNote').value = '';
       load();
